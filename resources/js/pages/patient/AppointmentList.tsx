@@ -1,10 +1,10 @@
 import { useForm, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, FileText } from 'lucide-react';
 import AppLayout from '@/layouts/app-layout';
 import { Head, usePage } from '@inertiajs/react';
 import { type BreadcrumbItem, type SharedData } from '@/types';
-import { Dialog } from '@headlessui/react'; // or use your own modal component
+import { Dialog } from '@headlessui/react';
 import { Button } from '@/components/ui/button';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -16,7 +16,10 @@ export default function AppointmentList() {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [selectedPrescription, setSelectedPrescription] = useState<any | null>(null);
+    const [showPrescriptionModal, setShowPrescriptionModal] = useState(false);
 
+    console.log(appointments);
     const confirmCancel = (id: number) => {
         setSelectedId(id);
         setShowConfirmModal(true);
@@ -30,6 +33,13 @@ export default function AppointmentList() {
                 setShowSuccessModal(true);
             },
         });
+    };
+
+    const openPrescription = (appt: any) => {
+        if (appt.prescription) {
+            setSelectedPrescription(appt.prescription);
+            setShowPrescriptionModal(true);
+        }
     };
 
     return (
@@ -61,7 +71,7 @@ export default function AppointmentList() {
                                 <td className="px-6 py-4">{appt.time}</td>
                                 <td className="px-6 py-4">{appt.doctor?.name}</td>
                                 <td className="px-6 py-4 capitalize">{appt.status}</td>
-                                <td className="px-6 py-4">
+                                <td className="px-6 py-4 space-x-2">
                                     {appt.status === 'pending' && (
                                         <button
                                             onClick={() => confirmCancel(appt.id)}
@@ -69,6 +79,16 @@ export default function AppointmentList() {
                                         >
                                             <Trash2 size={16} />
                                             Cancel
+                                        </button>
+                                    )}
+
+                                    {appt.status === 'completed' && appt.prescription && (
+                                        <button
+                                            onClick={() => openPrescription(appt)}
+                                            className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                                        >
+                                            <FileText size={16} />
+                                            Prescription
                                         </button>
                                     )}
                                 </td>
@@ -111,6 +131,34 @@ export default function AppointmentList() {
                                 </Dialog.Description>
                                 <div className="mt-4 flex justify-end">
                                     <Button onClick={() => setShowSuccessModal(false)}>OK</Button>
+                                </div>
+                            </Dialog.Panel>
+                        </div>
+                    </Dialog>
+                )}
+
+                {/* Prescription Modal */}
+                {showPrescriptionModal && selectedPrescription && (
+                    <Dialog open={showPrescriptionModal} onClose={() => setShowPrescriptionModal(false)} className="fixed z-50 inset-0 overflow-y-auto">
+                        <div className="flex items-center justify-center min-h-screen px-4">
+                            <Dialog.Panel className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl max-w-lg w-full">
+                                <Dialog.Title className="text-xl font-bold text-blue-700 dark:text-blue-300">
+                                    Prescription Details
+                                </Dialog.Title>
+                                <div className="mt-4 space-y-2 text-gray-700 dark:text-gray-200">
+                                    <p><strong>Diagnosis:</strong> {selectedPrescription.diagnosis}</p>
+                                    {selectedPrescription.tests && (
+                                        <p><strong>Tests:</strong> {selectedPrescription.tests}</p>
+                                    )}
+                                    {selectedPrescription.medicines && (
+                                        <p><strong>Medicines:</strong> {selectedPrescription.medicines}</p>
+                                    )}
+                                    {selectedPrescription.next_visit && (
+                                        <p><strong>Next Visit:</strong> {selectedPrescription.next_visit}</p>
+                                    )}
+                                </div>
+                                <div className="mt-4 flex justify-end">
+                                    <Button onClick={() => setShowPrescriptionModal(false)}>Close</Button>
                                 </div>
                             </Dialog.Panel>
                         </div>

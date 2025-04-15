@@ -58,7 +58,7 @@ class AppointmentController extends Controller
     {
         $patient_id = Auth::id();
         $appointments = Appointment::where('patient_id', $patient_id)
-            ->with('doctor')
+            ->with(['doctor', 'prescription'])
             ->get();
         return Inertia::render('patient/AppointmentList',[
             'appointments' => $appointments,

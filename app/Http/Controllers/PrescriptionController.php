@@ -20,16 +20,19 @@ class PrescriptionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'appointment_id' => 'required|exists:appointments,id',
-            'content' => 'required|string',
+            'diagnosis' => 'required|string',
+            'tests' => 'nullable|string',
+            'medicines' => 'nullable|string',
+            'next_visit' => 'nullable|string',
         ]);
 
-        Prescription::create([
-            'appointment_id' => $request->appointment_id,
-            'content' => $request->content,
-        ]);
+        Prescription::create($validated);
 
-        return redirect()->route('doctorDashboard')->with('success', 'Prescription created.');
+        $appt = Appointment::where('id', $validated['appointment_id'])->firstOrFail();
+        $appt->update(['status' => 'completed']);
+
+        return redirect()->back()->with('success', 'Prescription created successfully.');
     }
 }

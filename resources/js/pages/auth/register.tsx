@@ -79,8 +79,7 @@ export default function Register() {
                             id="age"
                             type="number"
                             required
-                            autoFocus
-                            tabIndex={1}
+                            tabIndex={3}
                             autoComplete="age"
                             value={data.age}
                             onChange={(e) => setData('age', e.target.value)}
@@ -92,20 +91,23 @@ export default function Register() {
 
                     <div className="grid gap-2">
                         <Label htmlFor="gender">Gender</Label>
-                        <Input
+                        <select
                             id="gender"
-                            type="text"
                             required
-                            autoFocus
-                            tabIndex={1}
-                            autoComplete="gender"
+                            tabIndex={4}
                             value={data.gender}
                             onChange={(e) => setData('gender', e.target.value)}
                             disabled={processing}
-                            placeholder="Gender"
-                        />
+                            className="rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <option value="" disabled>Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
                         <InputError message={errors.gender} className="mt-2" />
                     </div>
+
 
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
@@ -113,7 +115,7 @@ export default function Register() {
                             id="password"
                             type="password"
                             required
-                            tabIndex={3}
+                            tabIndex={5}
                             autoComplete="new-password"
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
@@ -129,7 +131,7 @@ export default function Register() {
                             id="password_confirmation"
                             type="password"
                             required
-                            tabIndex={4}
+                            tabIndex={6}
                             autoComplete="new-password"
                             value={data.password_confirmation}
                             onChange={(e) => setData('password_confirmation', e.target.value)}
@@ -139,7 +141,7 @@ export default function Register() {
                         <InputError message={errors.password_confirmation} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    <Button type="submit" className="mt-2 w-full" tabIndex={7} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </Button>
@@ -147,7 +149,7 @@ export default function Register() {
 
                 <div className="text-muted-foreground text-center text-sm">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={route('login')} tabIndex={8}>
                         Log in
                     </TextLink>
                 </div>

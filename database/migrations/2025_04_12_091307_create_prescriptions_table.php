@@ -14,11 +14,10 @@ return new class extends Migration
         Schema::create('prescriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('appointment_id')->constrained()->onDelete('cascade');
-//            $table->string('patient_code')->unique();
-            $table->text('diagnosis'); // the prescription content
-            $table->text('tests'); // the prescription content
-            $table->text('medicines'); // the prescription content
-            $table->text('next_visit'); // the prescription content
+            $table->string('diagnosis')->default("-"); // the prescription content
+            $table->string('tests')->default("-"); // the prescription content
+            $table->string('medicines')->default("-");; // the prescription content
+            $table->string('next_visit')->default("-");; // the prescription content
             $table->timestamps();
         });
     }

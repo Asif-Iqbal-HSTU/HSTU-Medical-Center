@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/appointments/{appointment}/cancel', [AppointmentController::class, 'cancel']);
     Route::get('/doctor/appointments/{appointment}/prescribe', [PrescriptionController::class, 'create']);
 
+    
+
 });
 
 
